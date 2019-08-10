@@ -1,4 +1,4 @@
-from DVFget import DVF
+from dvf import DVF
 
 
 def create_new_dataset(newfile, filenames, columns, condition_func, desc=None):
@@ -8,7 +8,7 @@ def create_new_dataset(newfile, filenames, columns, condition_func, desc=None):
             f.write(f"{desc}\n")
         for file in filenames:
             data = DVF.get_by_column(file, columns, condition_func)
-            block = [f"{line[0]},{line[1]},{line[2]},{line[3]},{line[4]},{line[5]},{line[6]},{line[7]},{line[9]},{line[8]},{line[10]}\n"[6:] for line in data]
+            block = [f"{line[0]},{line[1]},{line[2]},{line[3]},{line[4]},{line[5]},{line[6]},{line[7]},{line[8]},{line[9]}\n"[6:] for line in data]
             f.writelines(block)
 
 
@@ -29,13 +29,13 @@ def condition_func(line, indexes):
     return True
 
 if __name__ == "__main__":
-    desc = "Date de Vente, Nature de la vente, Prix, Numero de voie, Type de voie, Nom de voie, Code postal, Code type local, Nombre de pièces, Surface réelle bati, Surface terrain"
+    desc = "Date de Vente, Nature de la vente, Prix, Numero de voie, Type de voie, Nom de voie, Code postal, Code type local, Surface réelle bati, Surface terrain"
     new_filename = "BORDEAUX_14-18.csv"
-    cols = {8, 9, 10, 11, 13, 15, 16, 35, 38, 39, 42}
-    filenames = ["data/sample/prices_2014",
-                 "data/sample/prices_2015",
-                 "data/sample/prices_2016",
-                 "data/sample/prices_2017",
-                 "data/sample/prices_2018"]
+    cols = {8, 9, 10, 11, 13, 15, 16, 35, 38, 42}
+    filenames = ["../../../data/sample/prices_2014",
+                 "../../../data/sample/prices_2015",
+                 "../../../data/sample/prices_2016",
+                 "../../../data/sample/prices_2017",
+                 "../../../data/sample/prices_2018"]
 
     create_new_dataset(new_filename, filenames, cols, condition_func, desc)
