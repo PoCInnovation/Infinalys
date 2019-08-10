@@ -46,6 +46,12 @@ def no_null_real_price(line, indexes):
             return False
 
     line[10] = line[10][:-3]
-    if line[10] != '' and int(line[10]) < 10000:
+    if int(line[10]) < 10000:
+        return False
+    if int(line[10]) > 2000000:
+        return False
+    if line[17] != 'BORDEAUX':
+        return False
+    if int(line[42]) >= 10000:
         return False
     return True

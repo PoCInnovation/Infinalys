@@ -2,12 +2,10 @@ from DVFget import DVF, no_null_real_price
 from trainIA import trainIA
 
 import numpy as np
-
 datasetPath = "./data/sample/prices_2018"
 
 
 def getData():
-    # 17, 18, 36, literals to process
     cols = {10, 16, 34, 35, 38, 39, 42}
     data = DVF.get_by_column(datasetPath, cols, no_null_real_price)
     normalize(data)
