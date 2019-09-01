@@ -65,7 +65,7 @@ def compile_model(model):
     return model
 
 if __name__ == "__main__":
-    dataset = yf.download('TSLA')
+    dataset = yf.download('TSLA').to_numpy()
     dataset = normalize_data(dataset)
     x_train, y_train = split_dataset(dataset)
     x_test = x_train[int(len(x_train) - PREDICT):]
