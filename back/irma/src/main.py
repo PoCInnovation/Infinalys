@@ -14,7 +14,7 @@ PREDICT  = 20
 # AI predicts stocks at t with data from t-LOOKBACK to t-1
 LOOKBACK = 60
 # Number of epochs for training
-EPOCHS   = 10
+EPOCHS   = 20
 
 def plot_stocks_pandas(df):
     fig = go.Figure(data=[go.Candlestick(x=df.index,
@@ -23,16 +23,6 @@ def plot_stocks_pandas(df):
                                          low=df['Low'],
                                          close=df['Close'])])
     fig.show()
-
-# def plot_stocks_numpy(nparr):
-#     arr = np.swapaxes(nparr, 0,1)
-#     print(len(arr))
-#     fig = go.Figure(data=[go.Candlestick(x=list(range(len(arr))),
-#                                          open=arr[0],
-#                                          high=arr[1],
-#                                          low=arr[2],
-#                                          close=arr[3])])
-#     fig.show()
 
 def normalize_data(dataset):
     '''
@@ -87,49 +77,40 @@ def test_model(model, x_test, y_test):
 
 def plot_result(y_train, x_test, y_test):
     # Dataset
-    # data_open = [data[1] for data in y_train]
-    # data_high = [data[2] for data in y_train]
-    # data_low = [data[3] for data in y_train]
-    # data_close = [data[4] for data in y_train]
+    data_open = [data[1] for data in y_train]
+    data_high = [data[2] for data in y_train]
+    data_low = [data[3] for data in y_train]
+    data_close = [data[4] for data in y_train]
     data_time = [i for i in range(len(y_train))]
-    # plt.plot(data_time , data_open)
+    plt.plot(data_time[:LOOKBACK] , data_open[len(data_open) - LOOKBACK:])
     data_open = []
-    #plt.plot(data_time , data_close)
-    #plt.plot(data_time , data_high)
-    #plt.plot(data_time , data_low)
     
-    # # Prediction
-    # data_time = [data_time[-1] + i for i in range(len(y_test))]
-    # data_open, data_high, data_low, data_close = [], [], [], []
-    # for i in range(PREDICT):
-    #     tab = model.predict(np.array([x_test[i]]))[0]
-    #     data_open.append(tab[0])
-    #     data_high.append(tab[1])
-    #     data_low.append(tab[2])
-    #     data_close.append(tab[3])
-    # plt.plot(data_time , data_open)
-    # #plt.plot(data_time , data_close)
-    # #plt.plot(data_time , data_high)
-    # #plt.plot(data_time , data_low)
+    # Prediction
+    data_time = [i for i in range(len(y_test))]
+    data_open, data_high, data_low, data_close = [], [], [], []
+    values = x_test[0]
+    for i in range(PREDICT):
+        tab = model.predict(np.array([values]))
+        values = np.append(values, tab, axis=0)
+        values = values[1:]
+        data_open.append(values[-1][0])
+    plt.plot([j for j in range(LOOKBACK, LOOKBACK + PREDICT)] , data_open)
 
-    # # Expected
-    # data_open, data_high, data_low, data_close = [], [], [], []
-    # for i in range(PREDICT):
-    #     tab = y_test[i]
-    #     data_open.append(tab[0])
-    #     data_high.append(tab[1])
-    #     data_low.append(tab[2])
-    #     data_close.append(tab[3])
-    # plt.plot(data_time , data_open)
-    # #plt.plot(data_time , data_close)
-    # #plt.plot(data_time , data_high)
-    # #plt.plot(data_time , data_low)
-    # plt.title('Stock evolution')
-    # plt.ylabel('stock')
-    # plt.xlabel('time')
-    # plt.legend(['data', 'got', "expected"], loc='upper left')
-    # plt.show()
-    
+    # Expected
+    data_open, data_high, data_low, data_close = [], [], [], []
+    for i in range(PREDICT):
+        tab = y_test[i]
+        data_open.append(tab[0])
+        data_high.append(tab[1])
+        data_low.append(tab[2])
+        data_close.append(tab[3])
+    plt.plot([j for j in range(LOOKBACK, LOOKBACK + PREDICT)], data_open)
+    plt.title('Stock evolution')
+    plt.ylabel('stock')
+    plt.xlabel('time')
+    plt.legend(['data', 'got', "expected"], loc='upper left')
+    plt.show()
+
      # Prediction
     data_time = [i for i in range(len(y_test))]
     data_open, data_high, data_low, data_close = [], [], [], []
@@ -139,13 +120,7 @@ def plot_result(y_train, x_test, y_test):
         values = np.append(values, tab, axis=0)
         values = values[1:]
         data_open.append(values[-1][0])
-        # data_high.append(values[-1][1])
-        # data_low.append(values[-1][2])
-        # data_close.append(values[-1][3])
     plt.plot(data_time , data_open)
-    #plt.plot(data_time , data_close)
-    #plt.plot(data_time , data_high)
-    #plt.plot(data_time , data_low)
 
     # Expected
     data_open, data_high, data_low, data_close = [], [], [], []
@@ -156,24 +131,19 @@ def plot_result(y_train, x_test, y_test):
         data_low.append(tab[2])
         data_close.append(tab[3])
     plt.plot(data_time , data_open)
-    #plt.plot(data_time , data_close)
-    #plt.plot(data_time , data_high)
-    #plt.plot(data_time , data_low)
     plt.title('Stock evolution')
     plt.ylabel('stock')
     plt.xlabel('time')
     plt.legend(['got', "expected"], loc='upper left')
     plt.show()
 
-
 SAVE = True
 LOAD = False
 MODEL_PATH = './model_saves/first_try.h5'
 
-
 if __name__ == "__main__":
-    dataset = yf.download('AAPL').to_numpy()
-    # dataset = pd.read_csv('./tesla_stocks.csv').to_numpy()
+    # dataset = yf.download('AAPL').to_numpy()
+    dataset = pd.read_csv('./tesla_stocks.csv').to_numpy()
     dataset = normalize_data(dataset)
     x_train, y_train = split_dataset(dataset)
     x_test = x_train[int(len(x_train) - PREDICT):]
