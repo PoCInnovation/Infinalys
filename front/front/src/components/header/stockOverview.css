@@ -1,0 +1,13 @@
+.stocks-overview {
+    display: flex;
+    justify-content: space-between;
+}
+
+@keyframes .stocks-overview {
+  0%{
+    transform: translate3d(0, 0, 0);
+  }
+  100%{
+    transform: translate3d(-1692px, 0, 0);
+  }
+}
