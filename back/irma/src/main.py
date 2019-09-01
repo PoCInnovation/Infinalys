@@ -1,4 +1,7 @@
 #! /bin/env python3
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
+
 import numpy as np
 import yfinance as yf
 from tensorflow import keras
@@ -11,7 +14,6 @@ LOOKBACK = 30
 # Number of epochs for training
 EPOCHS   = 5
 
-
 def plot_stocks_pandas(df):
     fig = go.Figure(data=[go.Candlestick(x=df.index,
                                          open=df['Open'],
@@ -19,7 +21,6 @@ def plot_stocks_pandas(df):
                                          low=df['Low'],
                                          close=df['Close'])])
     fig.show()
-
 
 def normalize_data(dataset):
     '''
@@ -64,7 +65,7 @@ def compile_model(model):
     return model
 
 if __name__ == "__main__":
-    dataset = yf.download('AAPL').to_numpy()
+    dataset = yf.download('TSLA')
     dataset = normalize_data(dataset)
     x_train, y_train = split_dataset(dataset)
     x_test = x_train[int(len(x_train) - PREDICT):]
@@ -75,3 +76,4 @@ if __name__ == "__main__":
     model = get_model()
     compile_model(model)
     model.fit(x=x_train, y=y_train, epochs=EPOCHS)
+    print(model.evaluate(x=x_test, y=y_test))
