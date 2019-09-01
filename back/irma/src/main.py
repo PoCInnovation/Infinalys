@@ -2,6 +2,7 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
 
+import pandas as pd
 import numpy as np
 import yfinance as yf
 from tensorflow import keras
@@ -12,7 +13,7 @@ PREDICT  = 30
 # AI predicts stocks at t with data from t-LOOKBACK to t-1
 LOOKBACK = 30
 # Number of epochs for training
-EPOCHS   = 5
+EPOCHS   = 1
 
 def plot_stocks_pandas(df):
     fig = go.Figure(data=[go.Candlestick(x=df.index,
@@ -51,8 +52,9 @@ def get_model():
     '''
     model = keras.Sequential()
     model = keras.models.Sequential()
-    model.add(keras.layers.LSTM(4, input_shape=(LOOKBACK, 5), return_sequences=False))
-    model.add(keras.layers.Dropout(0.2))
+    model.add(keras.layers.LSTM(128, input_shape=(LOOKBACK, 5), return_sequences=True))
+    model.add(keras.layers.LSTM(128, input_shape=(LOOKBACK, 5), return_sequences=False))
+    model.add(keras.layers.Dropout(0.4))
     model.add(keras.layers.Dense(5, activation='relu'))
     return model
 
@@ -64,16 +66,37 @@ def compile_model(model):
     model.summary()
     return model
 
+def test_model(model, x, y):
+    res = []
+    for i in range(PREDICT):
+        print(x[:i].shape)
+        res.append(model.predict(x[:i]))
+    for i in range(len(res)):
+        print("Error:", abs(x[i] * 100 / y[i]))
+
+SAVE = True
+LOAD = False
+MODEL_PATH = './model_saves/first_try.h5'
+
 if __name__ == "__main__":
-    dataset = yf.download('TSLA').to_numpy()
+    # dataset = yf.download('TSLA').to_numpy()
+    dataset = pd.read_csv('./tesla_stocks.csv').to_numpy()
     dataset = normalize_data(dataset)
     x_train, y_train = split_dataset(dataset)
     x_test = x_train[int(len(x_train) - PREDICT):]
     x_train = x_train[:int(len(x_train) - PREDICT)]
     y_test = y_train[int(len(y_train) - PREDICT):]
     y_train = y_train[:int(len(y_train) - PREDICT)]
-
     model = get_model()
+
+    if LOAD:
+        model.load_weights(MODEL_PATH)
+
     compile_model(model)
-    model.fit(x=x_train, y=y_train, epochs=EPOCHS)
-    print(model.evaluate(x=x_test, y=y_test))
+    print(x_train.shape, x_test.shape, y_test.shape, y_train.shape)
+    exit()
+    model.fit(x=x_train, y=y_train, validation_split=0.2, epochs=EPOCHS)
+    test_model(model, x_test, y_test)
+
+    if SAVE:
+        model.save_weights(MODEL_PATH)
