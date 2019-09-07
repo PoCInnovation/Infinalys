@@ -17,6 +17,11 @@ const constraints = {
     }
 }
 
+/**
+ * reads file fiven in paramter
+ * @param {*} filename corresponds to a stock name
+ * @returns content of the file or error
+ */
 function read_json_from_file(filename) {
     return fs.readFileSync('/tmp/' + filename + '.json', 'utf8', (err, jsonString) => {
         if (err) {
@@ -34,6 +39,7 @@ function read_json_from_file(filename) {
 
 app.get('/api/predictions/:stock_name', function (req, res, next) {
     const errors = validate(req.params, constraints);
+    console.log(req.params);
     if (errors)
         return next(errors.message);
     try {
