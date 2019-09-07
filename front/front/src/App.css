@@ -1,0 +1,141 @@
+body {
+  font-family: Courier, monospace;
+  background-color: rgb(22,22,22);
+}
+
+h1, h2, p, label {
+  color: white;
+}
+
+img {
+  max-width: 400px;
+}
+
+.btn.btn-primary {
+  font-family: Courier, monospace;
+  height: 50px;
+  padding: 15px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  background-color: rgb(22,22,22);
+  color: white;
+  border: 1px solid white;
+}
+
+.btn.btn-primary:hover {
+  background-color: white;
+  border: none;
+  color: rgb(22,22,22);
+}
+
+/*  */
+
+.landing-layout img {
+  float: right;
+  margin-right: 10%;
+  padding-top: 5%;
+}
+
+.typewriter {
+  padding-top: 13%;
+  margin-left: 10%;
+display: inline-block;
+}
+
+.typewriter-text {
+  display: inline-block;
+  overflow: hidden;
+  letter-spacing: 2px;
+ animation: typing 3s steps(30, end), blink .75s step-end infinite;
+  white-space: nowrap;
+  font-size: 30px;
+  font-weight: 700;
+  border-right: 4px solid white;
+  box-sizing: border-box;
+}
+
+@keyframes typing {
+  from { 
+      width: 0% 
+  }
+  to { 
+      width: 100% 
+  }
+}
+
+@keyframes blink {
+  from, to { 
+      border-color: transparent 
+  }
+  50% { 
+      border-color: white; 
+  }
+}
+
+.header h1, .header h4 {
+  text-align: center;
+}
+
+.stocks-overview {
+  overflow: hidden;
+  display: inline;
+  position: relative;
+  animation: sliding 10s linear infinite;
+}
+
+.header {
+  cursor: pointer;
+}
+
+.stocks-overview:hover {
+  animation-play-state: paused;
+}
+
+.stock-overview {
+  margin-right: 30px;
+  display: inline;
+}
+
+@keyframes sliding {
+  0% {margin-left: 70%;}
+  100% {margin-left: 10%;}
+}
+
+
+.fa.fa-caret-down {
+  color :red;
+}
+
+.fa.fa-caret-up {
+  color: green;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid white;
+    max-width: 900px;
+    margin: auto;
+    margin-top: 300px;
+}
+
+.login input {
+    background-color: rgb(22,22,22);
+    border: none;
+    margin: auto;
+    border-bottom: 1px solid white;
+    width: 60%;
+    padding-top: 1%;
+    color: white;
+}
+
+.login label {
+    padding-top: 20px;
+    padding-bottom: 10px;
+    margin: auto;
+}
+
+.login .btn {
+    margin-top: 30px;
+}
