@@ -32,7 +32,7 @@ function read_json_from_file(filename) {
     })
 }
 
-app.get('/api/prediction/:stock_name', function (req, res, next) {
+app.get('/api/predictions/:stock_name', function (req, res, next) {
     const errors = validate(req.params, constraints);
     if (errors)
         return next(errors.message);
