@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StockOverview from './stockOverview';
 import Stock from '../../types/Stock';
-import './stockOverview.css';
 
 const URL = '/api/stocks/overview';
 
@@ -25,15 +24,17 @@ const MainStocksOverview = (): JSX.Element => {
     }, []);
 
     return (
-        <div className="stocks-overview">
-            {
-                loading || !stocks.length ?
-                    null
-                :
-                    stocks.map((stock: Stock) => (
-                        <StockOverview stock={stock}/>
-                    ))
-            }
+        <div className="box">
+            <div className="stocks-overview">
+                {
+                    loading || !stocks.length ?
+                        null
+                    :
+                        stocks.map((stock: Stock) => (
+                            <StockOverview stock={stock}/>
+                        ))
+                }
+            </div>
         </div>
     );
 }
