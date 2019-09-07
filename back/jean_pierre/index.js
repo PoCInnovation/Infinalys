@@ -33,32 +33,14 @@ function fetch_data(url) {
     });
 }
 
-const IRMA_API = 'http://localhost:3000/api';
-const JEANPIERRE_API = 'http://localhost:5000/api';
-
-/**
- * wrapper for calls to irma and jean-pierre api
- * @param {*} stock_name 
- * @returns a json object {infos: {jean-pierre json}, predictions: {irma-json}}
- */
-async function get_stock(stock_name) {
-    let json = await fetch_data(JEANPIERRE_API + '/news/' + stock_name);
-    const predictions = await fetch_data(IRMA_API + '/predictions/' + stock_name);
-
-    for (let key in predictions)
-        json[key] = predictions[key];
-    return json;
-}
-
-app.get('/api/stocks/:stock_name', async function (req, res, next) {
+app.get('/api/news/:stock_name', async function (req, res, next) {
     const errors = validate(req.params, constraints);
     if (errors)
         return next(errors.message);
-    const response_content = await get_stock(req.params.stock_name);
-    res.status(200).send(response_content);
+    res.status(200).send({"tintin": "milou"});
 })
 
-const PORT = 4000;
+const PORT = 5000;
 
 app.listen(PORT, function () {
     console.log('[*] Listening on port', String(PORT));
