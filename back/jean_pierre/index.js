@@ -8,8 +8,26 @@ const axios = require('axios');
 
 const fs = require('fs');
 
+const { parseString } = require('xml2js');
+
 const { stockNameValidator } = require('./schemas');
 
+
+/**
+ * convert a rss string to a JSON object
+ * @param rssString all rss feed as string
+ * @returns a JSON object of the feed
+ */
+const sendRssAsJson = (responseCallback, rssString) => {
+  parseString(rssString, (err, result) => {
+    if (err) {
+      throw err;
+    }
+    return responseCallback.status(200).send({
+      feed: result.rss.channel[0].item,
+    });
+  });
+};
 
 /**
  * wrapper for axios requests
@@ -26,9 +44,7 @@ const fetchData = (url) => axios({
  */
 app.get('/api/news', async (req, res) => {
   const feed = await fetchData('https://news.google.com/news/rss');
-  return res.status(200).send({
-    feed,
-  });
+  sendRssAsJson(res, feed);
 });
 
 
@@ -61,19 +77,15 @@ app.get('/api/news/:stockName', async (req, res, next) => {
     return next(errors.message);
   }
   const companyName = getCompanyName(req.params.stockName);
-  if (!companyName) {
+  if (companyName === null) {
     return res.status(400).send({
-      status: 'error',
-      data: null,
-      message: 'invalid stock name',
+      error: 'invalid stock name',
     });
   }
   const feed = await fetchData(
     `https://news.google.com/rss/search?q=${companyName}`,
   );
-  return res.status(200).send({
-    feed,
-  });
+  sendRssAsJson(res, feed);
 });
 
 
