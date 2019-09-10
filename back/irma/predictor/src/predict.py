@@ -2,11 +2,11 @@ import os
 import sys
 import numpy as np
 import pandas as pd
-from os.path import join as pjoin
+from tensorflow import keras
 
 EPOCHS = 1
-LOOKBACK = 5
-PREDICT = 5
+LOOKBACK = 20
+PREDICT = 20
 LOADING = (',-\'', '---', '\'-,', ' | ')
 LEN_LOADING = len(LOADING)
 
@@ -20,8 +20,18 @@ def print_advancement(file: str, curr: int, total: int):
     advancement = '\033[0;37;44m \033[0;0;0m' * \
         current_percent + '_' * (20 - current_percent)
     print(f'{advancement}| ', end='')
-    print(f'Predicting on file {file} ...', end='')
-    sys.stdout.flush()
+    print(f'Predicting on file {file} ...', end='', flush=True)
+
+
+class PrintLogs(keras.callbacks.Callback):
+    def __init__(self, epochs):
+        self.epochs = epochs
+
+    def set_params(self, params):
+        params['epochs'] = 0
+
+    def on_epoch_begin(self, epoch, logs=None):
+        print(' Epoch %d/%d' % (epoch + 1, self.epochs), end='', flush=True)
 
 
 def filter_data(raw_data: np.ndarray) -> np.ndarray:
@@ -50,6 +60,31 @@ def normalize_data(data: np.ndarray) -> np.ndarray:
     return data
 
 
+def split_data(data) -> (np.ndarray, np.ndarray):
+    """Split dataset and format it for the lstm model"""
+
+    x, y = [], []
+    for i in range(LOOKBACK, len(data)):
+        x.append(data[i-LOOKBACK:i])
+        y.append(data[i])
+    return np.array(x), np.array(y)
+
+
+def get_model():
+    """Defines LSTM model"""
+
+    model = keras.Sequential()
+    model = keras.models.Sequential([
+        keras.layers.LSTM(128, input_shape=(
+            LOOKBACK, 2), return_sequences=True),
+        keras.layers.Dropout(0.3),
+        keras.layers.LSTM(64, input_shape=(LOOKBACK, 2),
+                          return_sequences=False),
+        keras.layers.Dropout(0.3),
+        keras.layers.Dense(2, activation='relu')])
+    return model
+
+
 def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
     """Write predictions of stocks_path files to store_path
 
@@ -62,17 +97,34 @@ def predict_on_stocks(stocks_path: str, store_path: str, models_path: str):
         >>> predict_on_stocks('./stocks', './predictions', './models')
     """
 
+    import logging
+    logging.disable(logging.WARNING)
+    os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+
     dirs = os.listdir(stocks_path)
     nb_predictions = len(dirs)
 
     for i, file in enumerate(dirs):
-        print_advancement(pjoin(stocks_path, file), i, nb_predictions)
+        print_advancement(os.path.join(stocks_path, file), i, nb_predictions)
 
-        data = pd.read_csv(pjoin(stocks_path, file)).to_numpy()
+        data = pd.read_csv(os.path.join(stocks_path, file)).to_numpy()
         data = filter_data(data)
         data = normalize_data(data)
 
-    # Generate a prediction (cf wiki Irma) in store_path
+        model = get_model()
+        model.compile(optimizer='adam', loss='mse')
 
-    # TODO Model:
-    #   faire la moyene de open high low close -> [mean, volumes]
+        x_train, y_train = split_data(data)
+        model.fit(x=x_train, y=y_train,
+                  epochs=EPOCHS,
+                  verbose=0,
+                  batch_size=32,
+                  callbacks=[PrintLogs(EPOCHS)])
+
+        model_name = os.path.join(
+            models_path, os.path.splitext(file)[0] + '.h5')
+        model.save(model_name)
+
+        if i == len(dirs):
+            print_advancement(os.path.join(
+                stocks_path, file), i, nb_predictions)
