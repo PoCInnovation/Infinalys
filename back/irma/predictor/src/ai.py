@@ -89,6 +89,5 @@ if __name__ == "__main__":
         print('#' + str(errors_means.index(mean)), "\tAverage error", int(mean), "%")
     print("\nAVERAGE ERROR", np.mean(np.array(errors_means)), "% (calculated on the", PREDICT, "last time units of the dataset)")
     print("Evaluated loss: ", model.evaluate(x=x_test, y=y_test))
-    plot_result(y_train, x_test, y_test)
     if SAVE:
         model.save_weights(MODEL_PATH)
