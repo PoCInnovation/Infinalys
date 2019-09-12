@@ -3,7 +3,7 @@ import { Router, Route } from 'react-router';
 import Index from './components/index';
 import { createBrowserHistory } from 'history';
 import Login from './components/login';
-import StockPrediction from './components/stockPrediction';
+import StockPrediction from './components/clientPanel';
 import Header from './components/header/header';
 import './App.css';
 

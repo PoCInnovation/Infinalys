@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const LandingLayout = (): JSX.Element => (
     <div className="landing-layout">
-        <img src='http://pngimg.com/uploads/money/money_PNG3547.png'/>
+        <img src='http://pngimg.com/uploads/money/money_PNG3547.png' alt="infinalys"/>
         <div className="typewriter">
             <p className="typewriter-text">Artifical Intelligence as Financial Advisor</p>
             <br/>
