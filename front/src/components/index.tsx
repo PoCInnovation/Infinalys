@@ -1,12 +1,9 @@
 import React from 'react';
 import MainStocksOverview from './header/mainStocksOverview';
-import LandingLayout from './body/landingLayout/index';
+import LandingLayout from './body/landingLayout/landingLayout';
 
 const Index = (): JSX.Element => (
     <div className="App">
-        <div className="header">
-            <MainStocksOverview/>
-        </div>
         <div className="body">
             <LandingLayout/>
         </div>
