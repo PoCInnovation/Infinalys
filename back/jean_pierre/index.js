@@ -18,10 +18,16 @@ const { stockNameValidator } = require('./schemas');
  * @param rssString all rss feed as string
  * @returns a JSON object of the feed
  */
-const sendRssAsJson = (responseCallback, rssString) => {
+const sendRssAsJson = (responseCallback, rssString, info) => {
   parseString(rssString, (err, result) => {
     if (err) {
       throw err;
+    }
+    if (info) {
+        return responseCallback.status(200).send({
+          stockInfo: info,
+          feed: result.rss.channel[0].item,
+       }); 
     }
     return responseCallback.status(200).send({
       feed: result.rss.channel[0].item,
@@ -44,15 +50,15 @@ const fetchData = (url) => axios({
  */
 app.get('/api/news', async (req, res) => {
   const feed = await fetchData('https://news.google.com/news/rss');
-  sendRssAsJson(res, feed);
+  sendRssAsJson(res, feed, null);
 });
 
 
 /**
- * Gets name of the company corresponding to the given stockName
+ * Gets name, stockName and industry of the company corresponding to the given stockName
  * @param {*} stockName
  */
-const getCompanyName = (stockName) => {
+const getCompanyInfos = (stockName) => {
   const content = String(
     fs.readFileSync('../../assets/top_500_sp.csv')
   ).split('\n');
@@ -60,7 +66,7 @@ const getCompanyName = (stockName) => {
   for (let line = 0; line < content.length; line += 1) {
     tmp = content[line].split(',');
     if (tmp[0] === stockName) {
-      return tmp[1];
+      return {companyName: tmp[1], stockName: tmp[0], industry: tmp[2]};
     }
   }
   return null;
@@ -76,16 +82,16 @@ app.get('/api/news/:stockName', async (req, res, next) => {
   if (errors) {
     return next(errors.message);
   }
-  const companyName = getCompanyName(req.params.stockName);
-  if (companyName === null) {
+  const companyInfos = getCompanyInfos(req.params.stockName);
+  if (companyInfos === null) {
     return res.status(400).send({
       error: 'invalid stock name',
     });
   }
   const feed = await fetchData(
-    `https://news.google.com/rss/search?q=${companyName}`,
+    `https://news.google.com/rss/search?q=${companyInfos.companyName}`,
   );
-  sendRssAsJson(res, feed);
+  sendRssAsJson(res, feed, companyInfos);
 });
 
 
