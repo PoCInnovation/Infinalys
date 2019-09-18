@@ -36,7 +36,8 @@ def create_results(stocks_path: str, preds_path: str, results_path: str):
                 'Volume': list(preds['Volume']),
             }
         }
-        result_path = os.path.join(results_path, file)
+        file_name = os.path.splitext(file)[0] + '.json'
+        result_path = os.path.join(results_path, file_name)
         with open(result_path, 'w') as fp:
             json.dump(result, fp)
 
