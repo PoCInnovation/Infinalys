@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import StockOverview from './stockOverview';
 import Stock from '../../types/Stock';
+import shortid from 'shortid';
 
-const URL = '/api/stocks/overview';
+// const URL = '/api/stocks/overview';
 
 /**
  * Displays a bar with stock overviews
@@ -31,7 +32,7 @@ const MainStocksOverview = (): JSX.Element => {
                         null
                     :
                         stocks.map((stock: Stock) => (
-                            <StockOverview stock={stock}/>
+                            <StockOverview key={shortid.generate()} stock={stock}/>
                         ))
                 }
             </div>

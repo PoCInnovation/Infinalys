@@ -18,14 +18,12 @@ const { stockNameValidator } = require('./schemas');
  * @param rssString all rss feed as string
  * @returns a JSON object of the feed
  */
-const sendRssAsJson = (responseCallback, rssString) => {
+const sendRssAsJson = (callbackFunction, rssString) => {
   parseString(rssString, (err, result) => {
     if (err) {
       throw err;
     }
-    return responseCallback.status(200).send({
-      feed: result.rss.channel[0].item,
-    });
+    return callbackFunction(result.rss.channel[0].item);
   });
 };
 
@@ -39,13 +37,13 @@ const fetchData = (url) => axios({
 }).then((res) => res.data).catch((err) => err);
 
 
-/**
- * @returns all top news of the moment
- */
-app.get('/api/news', async (req, res) => {
-  const feed = await fetchData('https://news.google.com/news/rss');
-  sendRssAsJson(res, feed);
-});
+// /**
+//  * @returns all top news of the moment
+//  */
+// app.get('/api/news', async (req, res) => {
+//   const feed = await fetchData('https://news.google.com/news/rss');
+//   sendRssAsJson(res, feed);
+// });
 
 
 /**
@@ -54,13 +52,13 @@ app.get('/api/news', async (req, res) => {
  */
 const getCompanyName = (stockName) => {
   const content = String(
-    fs.readFileSync('../../assets/top_500_sp.csv')
+    fs.readFileSync('../../assets/top_500_sp.csv'),
   ).split('\n');
   let tmp = [];
   for (let line = 0; line < content.length; line += 1) {
     tmp = content[line].split(',');
     if (tmp[0] === stockName) {
-      return tmp[1];
+      return tmp;
     }
   }
   return null;
@@ -76,7 +74,8 @@ app.get('/api/news/:stockName', async (req, res, next) => {
   if (errors) {
     return next(errors.message);
   }
-  const companyName = getCompanyName(req.params.stockName);
+  const stockInfo = getCompanyName(req.params.stockName);
+  const companyName = stockInfo[1];
   if (companyName === null) {
     return res.status(400).send({
       error: 'invalid stock name',
@@ -85,7 +84,16 @@ app.get('/api/news/:stockName', async (req, res, next) => {
   const feed = await fetchData(
     `https://news.google.com/rss/search?q=${companyName}`,
   );
-  sendRssAsJson(res, feed);
+  sendRssAsJson((feed) => {
+    res.status(200).send({
+      stockInfo: {
+        stockName: stockInfo[0],
+        companyName: stockInfo[1],
+        industry: stockInfo[2],
+      },
+      feed,
+    });
+  }, feed);
 });
 
 

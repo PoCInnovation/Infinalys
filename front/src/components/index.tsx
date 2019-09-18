@@ -1,5 +1,4 @@
 import React from 'react';
-import MainStocksOverview from './header/mainStocksOverview';
 import LandingLayout from './body/landingLayout/landingLayout';
 
 const Index = (): JSX.Element => (
