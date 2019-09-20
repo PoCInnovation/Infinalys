@@ -3,7 +3,7 @@ body {
   background-color: rgb(22,22,22);
 }
 
-h1, h2, p, label {
+h1, h2, h3, p, label {
   color: white;
 }
 
@@ -98,8 +98,8 @@ display: inline-block;
 }
 
 @keyframes sliding {
-  0% {margin-left: 70%;}
-  100% {margin-left: 10%;}
+  0% {margin-left: 65%;}
+  100% {margin-left: -55%;}
 }
 
 
@@ -141,6 +141,10 @@ display: inline-block;
 }
 
 .search {
+  margin-top: 15%;
+}
+
+.search input {
   padding: 15px;
   border: none;
   font-size: 17px;
