@@ -10,14 +10,14 @@ const ClientPanel = (): JSX.Element => {
         );
     }
     return (
-        <div>
+        <div className="text-center search">
+            <h2>Search a Stock Name</h2>
             <input
-                className="search"
                 placeholder="stock name"
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); }}
             />
-            <button onClick={() => { setClick(true); }}>Search</button>
+            <button className="btn btn-primary" onClick={() => { setClick(true); }}>Search</button>
         </div>
     );
 };
