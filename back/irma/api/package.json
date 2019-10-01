@@ -12,6 +12,7 @@
   "author": "loicttn",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "nodemon": "^1.19.2",
     "validate.js": "^0.13.1"
   }

@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
+app.use(cors());
 const validate = require('validate.js');
 const fs = require('fs');
 const axios = require('axios');
