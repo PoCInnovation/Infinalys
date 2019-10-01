@@ -5,9 +5,6 @@ app.use(cors());
 const validate = require('validate.js');
 const fs = require('fs');
 const axios = require('axios');
-const cors = require('cors');
-
-app.use(cors())
 
 const constraints = {
     stock_name: {
