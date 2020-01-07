@@ -82,7 +82,7 @@ app.get('/api/news/:stockName', async (req, res, next) => {
     });
   }
   const feed = await fetchData(
-    `https://news.google.com/rss/search?q=${companyInfos.companyName}`,
+    `https://news.google.com/rss/search?q=${companyName}`,
   );
   sendRssAsJson((feed) => {
     res.status(200).send({
