@@ -34,6 +34,6 @@ The front is made in React and JS. This stack is called Emma.
 
 Here is the prediction output :
 
-![1](./github/inf1.png)
-![2](./github/inf2.png)
-![3](./github/inf3.png)
+![1](./assets/inf1.png)
+![2](./assets/inf2.png)
+![3](./assets/inf3.png)
