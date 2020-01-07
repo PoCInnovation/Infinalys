@@ -32,6 +32,6 @@ The front is made in React and JS. This stack is called Emma.
 
 # Screenshots
 
-Here is a small overview :
+Here is a small overview for a 4 days prediction :
 
 ![1](./assets/demo.gif)
