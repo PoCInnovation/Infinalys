@@ -3,7 +3,7 @@
 infinalys is a **PoC** project that aims to provide a time series artificial intelligence for **stock predictions**.
 The purpose of the project is also to provide a nice and clean **demo interface**.
 
-By [Loïc T.](https://github.com/loicttn) & [Robin C.](https://github.com/robinsharma48)
+By [Loïc T.](https://github.com/loicttn) & [Robin C.](https://github.com/Ltsrc)
 
 # Stack overview
 
