@@ -4,6 +4,8 @@ services:
     emma:
         ports:
             - "4444:4444"
+        volumes:
+            - ./front/emma:/app
         build:
             context: ./front/emma
             dockerfile: ./Dockerfile
@@ -13,17 +15,22 @@ services:
         build:
             context: ./back/jean_pierre
             dockerfile: ./Dockerfile
+        volumes:
+            - ./back/jean_pierre:/app
     nicos:
         ports:
             - "4000:4000"
         build:
             context: ./back/nicos
             dockerfile: ./Dockerfile
+        volumes:
+            - ./back/nicos:/app
     irma:
         ports:
             - "3000:3000"
         build:
-            context: ./back/irma
+            context: ./back/irma/api
             dockerfile: ./Dockerfile
         volumes:
-            - "/tmp:/tmp"
+            - /tmp:/tmp
+            - ./back/irma/api:/app
