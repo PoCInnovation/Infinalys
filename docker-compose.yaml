@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+    emma:
+        ports:
+            - "4444:4444"
+        build:
+            context: ./front/emma
+            dockerfile: ./Dockerfile
+    jean_pierre:
+        ports:
+            - "5000:5000"
+        build:
+            context: ./back/jean_pierre
+            dockerfile: ./Dockerfile
+    nicos:
+        ports:
+            - "4000:4000"
+        build:
+            context: ./back/nicos
+            dockerfile: ./Dockerfile
+    irma:
+        ports:
+            - "3000:3000"
+        build:
+            context: ./back/irma
+            dockerfile: ./Dockerfile
+        volumes:
+            - "/tmp:/tmp"
