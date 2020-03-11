@@ -15,7 +15,7 @@ The backend is composed of three main components :
 
 #### Predictor
 
-**API**: ExpressJS, used to deliver stock prediction results.
+**API**: ExpressJS, used to deliver stock prediction results.  
 **Script**: Python script, used to launch the training of the set stocks.
 
 #### Jean-Pierre
