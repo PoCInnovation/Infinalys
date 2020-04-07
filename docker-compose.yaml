@@ -6,6 +6,7 @@ services:
             - "4444:4444"
         volumes:
             - ./front/emma:/app
+        stdin_open: true
         build:
             context: ./front/emma
             dockerfile: ./Dockerfile
