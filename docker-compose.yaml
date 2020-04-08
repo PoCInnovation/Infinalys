@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
     emma:
@@ -10,6 +10,7 @@ services:
         build:
             context: ./front/emma
             dockerfile: ./Dockerfile
+        network_mode: "host"
     jean_pierre:
         ports:
             - "5000:5000"
@@ -18,6 +19,7 @@ services:
             dockerfile: ./Dockerfile
         volumes:
             - ./back/jean_pierre:/app
+        network_mode: "host"
     nicos:
         ports:
             - "4000:4000"
@@ -26,6 +28,7 @@ services:
             dockerfile: ./Dockerfile
         volumes:
             - ./back/nicos:/app
+        network_mode: "host"
     irma:
         ports:
             - "3000:3000"
@@ -35,3 +38,4 @@ services:
         volumes:
             - /tmp:/tmp
             - ./back/irma/api:/app
+        network_mode: "host"

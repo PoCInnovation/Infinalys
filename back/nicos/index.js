@@ -31,7 +31,8 @@ function fetch_data(url) {
     }).then(res => {
         return res.data;
     }).catch(err => {
-        return null
+        console.log(err);
+        return null;
     });
 }
 

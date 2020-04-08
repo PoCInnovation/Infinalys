@@ -52,7 +52,7 @@ const fetchData = (url) => axios({
  */
 const getCompanyInfos = (stockName) => {
   const content = String(
-    fs.readFileSync('../../assets/top_500_sp.csv'),
+    fs.readFileSync('./assets/top_500_sp.csv'),
   ).split('\n');
   let tmp = [];
   for (let line = 0; line < content.length; line += 1) {
