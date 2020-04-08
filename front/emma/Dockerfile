@@ -1,13 +1,11 @@
-FROM node:latest
+FROM alpine:latest
 
 WORKDIR /app
 
-COPY package.json /app
-
-RUN npm install
-# RUN sysctl fs.inotify.max_user_watches=16000
-
 COPY . /app
+# RUN sysctl fs.inotify.max_user_watches=16000
+RUN apk add --update nodejs npm
+RUN npm install
 
 ENV PORT=4444
 
