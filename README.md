@@ -1,9 +1,7 @@
-# infinalys
+# Infinalys
 
 infinalys is a **PoC** project that aims to provide a time series artificial intelligence for **stock predictions**.
 The purpose of the project is also to provide a nice and clean **demo interface**.
-
-By [Loïc T.](https://github.com/loicttn) & [Robin C.](https://github.com/Ltsrc)
 
 # Stack overview
 
@@ -35,3 +33,8 @@ The front is made in React and JS. This stack is called Emma.
 Here is a small overview for a 4 days prediction :
 
 ![1](./assets/demo.gif)
+
+## Authors
+
+ - [Loïc Titren](https://github.com/loicttn)
+ - [Robin Christol](https://github.com/Ltsrc)
